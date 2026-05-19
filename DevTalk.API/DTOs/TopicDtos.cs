@@ -15,6 +15,20 @@ public record TopicDto(
     int CommentCount
 );
 
+// Detail DTO — returned by GET /api/topics/{id}, includes full comment list
+public record TopicDetailDto(
+    int Id,
+    string Title,
+    string Body,
+    string Category,
+    int AuthorId,
+    string AuthorUsername,
+    DateTime CreatedAt,
+    int ViewCount,
+    int CommentCount,
+    IEnumerable<CommentDto> Comments
+);
+
 // Request DTO — used when creating a new topic
 public record CreateTopicRequest(
     string Title,

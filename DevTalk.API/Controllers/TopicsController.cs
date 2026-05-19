@@ -47,7 +47,14 @@ public class TopicsController : ControllerBase
         topic.ViewCount++;
         await _db.SaveChangesAsync();
 
-        return Ok(MapToDto(topic));
+        var comments = topic.Comments
+            .OrderBy(c => c.CreatedAt)
+            .Select(c => new CommentDto(c.Id, c.Body, c.AuthorId, c.Author?.Username ?? "Unknown", c.TopicId, c.CreatedAt));
+
+        return Ok(new TopicDetailDto(
+            topic.Id, topic.Title, topic.Body, topic.Category,
+            topic.AuthorId, topic.Author?.Username ?? "Unknown",
+            topic.CreatedAt, topic.ViewCount, topic.Comments.Count, comments));
     }
 
     // POST /api/topics — creates a new forum topic
